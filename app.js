@@ -217,9 +217,17 @@ function addPhotoToGallery(imageDataURL) {
 }
 
 function updatePhotoCount() {
-    const count = galleryScroll.children.length;
+    // Contar solo los elementos con clase gallery-thumbnail (las fotos)
+    const photoElements = document.querySelectorAll('.gallery-thumbnail');
+    const count = photoElements.length;
     const countElement = document.querySelector('.gallery-count') || createCountElement();
     countElement.textContent = `${count} foto${count !== 1 ? 's' : ''}`;
+    
+    // Ocultar/mostrar el mensaje de galería vacía
+    const emptyMessage = document.querySelector('.gallery-empty');
+    if (emptyMessage) {
+        emptyMessage.style.display = count === 0 ? 'block' : 'none';
+    }
 }
 
 function createCountElement() {
