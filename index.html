@@ -6,17 +6,31 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Photo</title>
     <link rel="manifest" href="/CameraPWA/manifest.json">
+    <link rel="stylesheet" href="/CameraPWA/styles.css">
 
 </head>
 
 <body>
-    <button id="openCamera">Abrir camara</button>
+    <button id="openCamera">Abrir Cámara</button>
+
     <div id="cameraContainer" style="display: none;">
-        <video id="video" width="320" height="240" autoplay muted playsinline>
+        <video id="video" autoplay muted playsinline>
             Your browser does not support the video tag.
         </video>
-        <button id="takePhoto">Tomar foto</button>
-        <canvas id="canvas" width="320" height="240"></canvas>
+        <button id="takePhoto">Tomar Foto</button>
+
+        <canvas id="canvas"></canvas>
+    </div>
+
+    <div id="galleryContainer" class="gallery-container" style="display: none;">
+        <h3>Mis Fotos</h3>
+        <div id="gallery-scroll" class="gallery-scroll">
+        </div>
+    </div>
+
+    <div id="modal" class="modal">
+        <span id="modalClose" class="modal-close">&times;</span>
+        <img class="modal-content" id="modalImage">
     </div>
 
     <script src="/CameraPWA/app.js"></script>
