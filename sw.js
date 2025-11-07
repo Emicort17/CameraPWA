@@ -4,7 +4,8 @@ const urlsToCache = [ // Lista de archivos a guardar en caché
     '/CameraPWA/',
     '/CameraPWA/index.html',
     '/CameraPWA/app.js',
-    '/CameraPWA/manifest.json'
+    '/CameraPWA/manifest.json',
+    '/CameraPWA/style.css',
 ];
 
 // Instalar Service Worker
