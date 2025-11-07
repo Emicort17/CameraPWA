@@ -141,23 +141,38 @@
             position: relative;
         }
 
-        .camera-container::before {
-            content: '';
-            position: absolute;
-            top: 0;
-            left: 0;
-            right: 0;
-            height: 4px;
-            background: var(--gradient);
-        }
+.camera-container {
+    width: 100%;
+    max-width: 100%; 
+    margin: 0 auto 24px;
+    border-radius: 20px;
+    overflow: hidden;
+    background: var(--card-bg);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    position: relative;
+}
 
-        #video {
-            width: 100%;
-            height: auto;
-            display: block;
-            background: var(--dark);
-            aspect-ratio: 4/3;
-        }
+#video {
+    width: 100%;
+    height: 60vh; 
+    max-height: 500px; 
+    display: block;
+    background: var(--dark);
+    object-fit: cover; 
+}
+
+@media (orientation: landscape) {
+    #video {
+        height: 70vh;
+        max-height: 400px;
+    }
+}
+
+#takePhoto {
+    margin-top: 15px;
+    background: linear-gradient(135deg, #10b981, #059669);
+}
 
         /* Galería moderna */
         .gallery-container {
@@ -359,3 +374,4 @@
         .gallery-empty:not(:only-child) {
             display: none;
         }
+
