@@ -1,0 +1,120 @@
+/* style.css */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    margin: 0;
+    padding: 1em;
+    background-color: #f4f4f4;
+}
+
+button {
+    font-size: 1em;
+    padding: 0.5em 1em;
+    margin-bottom: 1em;
+    cursor: pointer;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 5px;
+}
+
+button:disabled {
+    background-color: #aaa;
+}
+
+/* --- 1. Estilos de la Cámara (Para evitar distorsión) --- */
+#cameraContainer {
+    width: 100%;
+    max-width: 600px; /* Límite de ancho para pantallas grandes */
+    margin: 0 auto;
+    border: 1px solid #ccc;
+    background-color: #000;
+}
+
+#video {
+    width: 100%;
+    height: auto;
+    display: block;
+    /* Esta es la propiedad clave para evitar distorsión */
+    object-fit: cover; 
+}
+
+/* Ocultamos el canvas, solo lo usamos para procesar la imagen */
+#canvas {
+    display: none;
+}
+
+
+/* --- 2. Estilos de la Galería Deslizable --- */
+.gallery-container {
+    width: 100%;
+    max-width: 600px;
+    margin: 1em auto 0;
+    padding: 10px;
+    background-color: #fff;
+    border: 1px solid #ddd;
+    box-sizing: border-box;
+}
+
+h3 {
+    margin-top: 0;
+    padding-bottom: 5px;
+    border-bottom: 1px solid #eee;
+}
+
+.gallery-scroll {
+    display: flex;
+    overflow-x: auto; /* Habilita el scroll horizontal */
+    white-space: nowrap; /* Evita que las imágenes salten de línea */
+    padding-bottom: 10px;
+}
+
+.gallery-thumbnail {
+    width: 100px;
+    height: 100px;
+    object-fit: cover; /* Asegura que la miniatura se vea bien */
+    margin-right: 10px;
+    border: 2px solid #ccc;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: transform 0.2s;
+}
+
+.gallery-thumbnail:hover {
+    transform: scale(1.05);
+}
+
+
+/* --- 3. Estilos del Modal --- */
+.modal {
+    display: none; /* Oculto por defecto */
+    position: fixed;
+    z-index: 1000;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    background-color: rgba(0, 0, 0, 0.85);
+    
+    /* Centrar la imagen con Flexbox */
+    justify-content: center;
+    align-items: center;
+}
+
+.modal-content {
+    max-width: 90%;
+    max-height: 90%;
+}
+
+.modal-close {
+    position: absolute;
+    top: 20px;
+    right: 35px;
+    color: #fff;
+    font-size: 40px;
+    font-weight: bold;
+    cursor: pointer;
+}
+
+.modal-close:hover {
+    color: #bbb;
+}
