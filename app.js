@@ -38,20 +38,20 @@ async function openCamera() {
 
         // 2. Obtener el Stream de Medios
         stream = await navigator.mediaDevices.getUserMedia(constraints);
-        
+
         // 3. Asignar el Stream al Elemento <video>
         video.srcObject = stream;
-        
+
         // 4. [CORRECIÓN] Esperar a que el video pueda reproducirse
         video.onloadeddata = () => {
             // Ajustar el canvas al tamaño real del video
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-            
+
             // Ajustar también el contenedor para mantener proporciones
             video.style.width = '100%';
             video.style.height = 'auto';
-            
+
             console.log(`Video dimensiones: ${video.videoWidth}x${video.videoHeight}`);
             console.log(`Canvas ajustado a: ${canvas.width}x${canvas.height}`);
         };
@@ -60,7 +60,7 @@ async function openCamera() {
         cameraContainer.style.display = 'block';
         openCameraBtn.textContent = 'Cámara Abierta';
         openCameraBtn.disabled = true;
-        
+
         console.log('Cámara abierta');
 
     } catch (err) {
@@ -78,10 +78,10 @@ function takePhoto() {
     // 1. Dibujar el Frame de Video en el Canvas
     // El canvas ya tiene el tamaño correcto gracias a 'onloadedmetadata'
     ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
-    
+
     // 2. Conversión a Data URL
     const imageDataURL = canvas.toDataURL('image/png');
-    
+
     // 3. (Opcional) Visualización y Depuración
     console.log('Foto capturada');
 
@@ -98,19 +98,55 @@ function addPhotoToGallery(imageDataURL) {
         galleryContainer.style.display = 'block';
     }
 
-    // Crear la miniatura (el "bloque pequeño")
+    // Crear la miniatura
     const img = document.createElement('img');
     img.src = imageDataURL;
     img.classList.add('gallery-thumbnail');
+    img.loading = 'lazy';
 
-    // [NUEVO] Añadir evento de clic para abrir el modal
+    // Añadir evento de clic para abrir el modal
     img.addEventListener('click', () => {
         openModal(imageDataURL);
     });
 
     // Añadir la imagen al contenedor deslizable
-    // Usamos prepend para que la foto más nueva aparezca primero
     galleryScroll.prepend(img);
+
+    // Actualizar contador de fotos
+    updatePhotoCount();
+
+    // Mostrar notificación
+    showNotification('¡Foto capturada! 📸');
+}
+
+function updatePhotoCount() {
+    const count = galleryScroll.children.length;
+    const countElement = document.querySelector('.gallery-count') || createCountElement();
+    countElement.textContent = `${count} foto${count !== 1 ? 's' : ''}`;
+}
+
+function createCountElement() {
+    const countElement = document.createElement('div');
+    countElement.classList.add('gallery-count');
+    document.querySelector('.gallery-header').appendChild(countElement);
+    return countElement;
+}
+
+function showNotification(message) {
+    // Crear notificación si no existe
+    let notification = document.querySelector('.notification');
+    if (!notification) {
+        notification = document.createElement('div');
+        notification.classList.add('notification');
+        document.body.appendChild(notification);
+    }
+
+    notification.textContent = message;
+    notification.classList.add('show');
+
+    setTimeout(() => {
+        notification.classList.remove('show');
+    }, 3000);
 }
 
 // --- Funciones del Modal ---
