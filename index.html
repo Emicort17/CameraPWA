@@ -4,32 +4,50 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Photo PWA</title>
-    <meta name="theme-color" content="#007bff">
+    <title>PhotoPWA</title>
+    <meta name="theme-color" content="#6366f1">
     <link rel="manifest" href="/CameraPWA/manifest.json">
     <link rel="stylesheet" href="/CameraPWA/styles.css">
 </head>
 
 <body>
-    <button id="openCamera">Abrir Cámara</button>
+    <div class="app-container">
+        <header class="app-header">
+            <h1 class="app-title">PhotoPWA</h1>
+            <p class="app-subtitle">Captura momentos increíbles</p>
+        </header>
 
-    <div id="cameraContainer" style="display: none;">
-        <video id="video" autoplay muted playsinline>
-            Tu navegador no soporta el elemento video.
-        </video>
-        <button id="takePhoto">Tomar Foto</button>
-        <canvas id="canvas"></canvas>
-    </div>
+        <button id="openCamera" class="btn btn-primary">
+            Abrir Cámara
+        </button>
 
-    <div id="galleryContainer" class="gallery-container" style="display: none;">
-        <h3>📸 Mis Fotos</h3>
-        <div id="gallery-scroll" class="gallery-scroll">
+        <div id="cameraContainer" class="camera-container" style="display: none;">
+            <video id="video" autoplay muted playsinline>
+                Tu navegador no soporta el elemento video.
+            </video>
+            <button id="takePhoto" class="btn btn-success">
+                Tomar Foto
+            </button>
+            <canvas id="canvas"></canvas>
         </div>
-    </div>
 
-    <div id="modal" class="modal">
-        <span id="modalClose" class="modal-close">&times;</span>
-        <img class="modal-content" id="modalImage">
+        <div id="galleryContainer" class="gallery-container" style="display: none;">
+            <div class="gallery-header">
+                <h3 class="gallery-title">Mis Fotos</h3>
+                <div class="gallery-count">0 fotos</div>
+            </div>
+            <div id="gallery-scroll" class="gallery-scroll">
+                <div class="gallery-empty">
+                    Todavía no hay fotos<br>
+                    <small>Toma tu primera foto para comenzar</small>
+                </div>
+            </div>
+        </div>
+
+        <div id="modal" class="modal">
+            <span id="modalClose" class="modal-close">&times;</span>
+            <img class="modal-content" id="modalImage">
+        </div>
     </div>
 
     <script src="/CameraPWA/app.js"></script>
