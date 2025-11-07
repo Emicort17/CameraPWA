@@ -75,20 +75,35 @@ function takePhoto() {
         return;
     }
 
-    // 1. Dibujar el Frame de Video en el Canvas
-    // El canvas ya tiene el tamaño correcto gracias a 'onloadedmetadata'
-    ctx.drawImage(video, 0, 0, canvas.width, canvas.height);
+    // 1. Obtener las dimensiones REALES del video en pantalla
+    const videoDisplayWidth = video.videoWidth;
+    const videoDisplayHeight = video.videoHeight;
+    
+    // 2. Obtener las dimensiones del CONTENEDOR del video
+    const containerWidth = video.offsetWidth;
+    const containerHeight = video.offsetHeight;
+    
+    console.log(`Video real: ${videoDisplayWidth}x${videoDisplayHeight}`);
+    console.log(`Contenedor: ${containerWidth}x${containerHeight}`);
 
-    // 2. Conversión a Data URL
-    const imageDataURL = canvas.toDataURL('image/png');
+    // 3. Calcular la relación de aspecto y escalar apropiadamente
+    const scaleX = videoDisplayWidth / containerWidth;
+    const scaleY = videoDisplayHeight / containerHeight;
+    const scale = Math.min(scaleX, scaleY);
+    
+    // 4. Ajustar el canvas al tamaño de DISPLAY (no al nativo)
+    canvas.width = containerWidth;
+    canvas.height = containerHeight;
+    
+    // 5. Dibujar el video escalado al tamaño del contenedor
+    ctx.drawImage(video, 0, 0, containerWidth, containerHeight);
 
-    // 3. (Opcional) Visualización y Depuración
-    console.log('Foto capturada');
+    // 6. Conversión a Data URL
+    const imageDataURL = canvas.toDataURL('image/jpeg', 0.8); // Usar JPEG para menor tamaño
 
-    // 4. ¡No cerramos la cámara!
-    // closeCamera(); // Comentado para poder tomar varias fotos
+    console.log('Foto capturada con dimensiones:', canvas.width, 'x', canvas.height);
 
-    // 5. [NUEVO] Añadir la foto a la galería
+    // 7. Añadir la foto a la galería
     addPhotoToGallery(imageDataURL);
 }
 
