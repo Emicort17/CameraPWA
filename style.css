@@ -1,134 +1,266 @@
-/* styles.css */
+/* styles.css - Estilos Frescos y Modernos */
 * {
     box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+    --primary: #6366f1;
+    --primary-dark: #4f46e5;
+    --secondary: #f59e0b;
+    --accent: #ec4899;
+    --dark: #1e293b;
+    --light: #f8fafc;
+    --gray: #64748b;
+    --success: #10b981;
+    --card-bg: #ffffff;
+    --shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.1), 0 8px 10px -6px rgba(0, 0, 0, 0.1);
+    --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
 }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
     margin: 0;
-    padding: 1em;
-    background-color: #f4f4f4;
-    max-width: 100vw;
-    overflow-x: hidden;
+    padding: 0;
+    background: var(--light);
+    color: var(--dark);
+    min-height: 100vh;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
 }
 
-button {
-    font-size: 1em;
-    padding: 0.8em 1.5em;
-    margin-bottom: 1em;
+/* Container principal */
+.app-container {
+    max-width: 100%;
+    padding: 16px;
+    margin: 0 auto;
+}
+
+/* Header estilos */
+.app-header {
+    text-align: center;
+    margin-bottom: 24px;
+    padding: 20px 0;
+}
+
+.app-title {
+    font-size: 2.2rem;
+    font-weight: 800;
+    background: var(--gradient);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+    margin-bottom: 8px;
+}
+
+.app-subtitle {
+    color: var(--gray);
+    font-size: 1rem;
+    font-weight: 500;
+}
+
+/* Botones modernos */
+.btn {
+    font-size: 1rem;
+    font-weight: 600;
+    padding: 14px 24px;
+    margin-bottom: 16px;
     cursor: pointer;
-    background-color: #007bff;
-    color: white;
     border: none;
-    border-radius: 8px;
+    border-radius: 12px;
+    transition: all 0.3s ease;
     width: 100%;
     max-width: 300px;
     display: block;
     margin-left: auto;
     margin-right: auto;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+    position: relative;
+    overflow: hidden;
 }
 
-button:disabled {
-    background-color: #aaa;
+.btn::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+    transition: left 0.5s;
+}
+
+.btn:hover::before {
+    left: 100%;
+}
+
+.btn-primary {
+    background: var(--gradient);
+    color: white;
+    box-shadow: var(--shadow);
+}
+
+.btn-primary:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px -10px rgba(99, 102, 241, 0.4);
+}
+
+.btn-success {
+    background: linear-gradient(135deg, var(--success), #059669);
+    color: white;
+    box-shadow: var(--shadow);
+}
+
+.btn-success:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 20px 40px -10px rgba(16, 185, 129, 0.4);
+}
+
+.btn:disabled {
+    background: #cbd5e1;
+    color: #64748b;
+    transform: none;
+    box-shadow: none;
     cursor: not-allowed;
 }
 
-/* --- 1. Estilos de la Cámara Mejorados --- */
-#cameraContainer {
+.btn:disabled::before {
+    display: none;
+}
+
+/* Contenedor de cámara moderno */
+.camera-container {
     width: 100%;
-    max-width: 100%;
-    margin: 0 auto 1em;
-    border: 1px solid #ccc;
-    background-color: #000;
-    border-radius: 10px;
+    max-width: 400px;
+    margin: 0 auto 24px;
+    border-radius: 20px;
     overflow: hidden;
+    background: var(--card-bg);
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.2);
     position: relative;
+}
+
+.camera-container::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: var(--gradient);
 }
 
 #video {
     width: 100%;
     height: auto;
     display: block;
-    background-color: #000;
-    /* Mantener relación de aspecto */
+    background: var(--dark);
     aspect-ratio: 4/3;
 }
 
-#takePhoto {
-    background-color: #28a745;
-    margin-top: 10px;
-}
-
-/* Ocultamos el canvas, solo lo usamos para procesar la imagen */
-#canvas {
-    display: none;
-}
-
-/* --- 2. Estilos de la Galería Deslizable Mejorados --- */
+/* Galería moderna */
 .gallery-container {
     width: 100%;
-    max-width: 100%;
-    margin: 1em auto 0;
-    padding: 15px;
-    background-color: #fff;
-    border: 1px solid #ddd;
-    border-radius: 10px;
-    box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    margin: 24px auto 0;
+    padding: 20px;
+    background: var(--card-bg);
+    border-radius: 20px;
+    box-shadow: var(--shadow);
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    backdrop-filter: blur(10px);
 }
 
-.gallery-container h3 {
-    margin-top: 0;
-    padding-bottom: 10px;
-    border-bottom: 2px solid #007bff;
-    color: #333;
-    text-align: center;
+.gallery-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin-bottom: 16px;
+    padding-bottom: 12px;
+    border-bottom: 2px solid #e2e8f0;
+}
+
+.gallery-title {
+    font-size: 1.4rem;
+    font-weight: 700;
+    color: var(--dark);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.gallery-title::before {
+    content: '📸';
+    font-size: 1.2em;
+}
+
+.gallery-count {
+    background: var(--gradient);
+    color: white;
+    padding: 4px 12px;
+    border-radius: 20px;
+    font-size: 0.8rem;
+    font-weight: 600;
 }
 
 .gallery-scroll {
     display: flex;
     overflow-x: auto;
     overflow-y: hidden;
-    white-space: nowrap;
-    padding: 10px 5px;
-    gap: 10px;
+    padding: 16px 8px;
+    gap: 16px;
     scrollbar-width: thin;
-    scrollbar-color: #007bff #f0f0f0;
+    scrollbar-color: var(--primary) #f1f5f9;
 }
 
-/* Estilos para la barra de scroll en navegadores WebKit */
 .gallery-scroll::-webkit-scrollbar {
-    height: 8px;
+    height: 6px;
 }
 
 .gallery-scroll::-webkit-scrollbar-track {
-    background: #f0f0f0;
-    border-radius: 4px;
+    background: #f1f5f9;
+    border-radius: 10px;
 }
 
 .gallery-scroll::-webkit-scrollbar-thumb {
-    background: #007bff;
-    border-radius: 4px;
+    background: var(--gradient);
+    border-radius: 10px;
 }
 
 .gallery-thumbnail {
     width: 120px;
     height: 120px;
     object-fit: cover;
-    border: 3px solid #fff;
-    border-radius: 8px;
+    border-radius: 16px;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-    flex-shrink: 0; /* Evita que las imágenes se encojan */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    border: 3px solid transparent;
+    flex-shrink: 0;
 }
 
 .gallery-thumbnail:hover {
-    transform: scale(1.08);
-    border-color: #007bff;
-    box-shadow: 0 4px 12px rgba(0,0,0,0.3);
+    transform: translateY(-4px) scale(1.05);
+    box-shadow: 0 12px 25px rgba(0, 0, 0, 0.25);
+    border-color: var(--primary);
 }
 
-/* --- 3. Estilos del Modal Mejorados --- */
+.gallery-empty {
+    text-align: center;
+    padding: 40px 20px;
+    color: var(--gray);
+}
+
+.gallery-empty::before {
+    content: '🖼️';
+    font-size: 3rem;
+    display: block;
+    margin-bottom: 12px;
+    opacity: 0.5;
+}
+
+/* Modal moderno */
 .modal {
     display: none;
     position: fixed;
@@ -137,62 +269,103 @@ button:disabled {
     top: 0;
     width: 100%;
     height: 100%;
-    background-color: rgba(0, 0, 0, 0.95);
+    background: rgba(0, 0, 0, 0.95);
+    backdrop-filter: blur(5px);
     justify-content: center;
     align-items: center;
-    animation: fadeIn 0.3s ease;
+    animation: modalFadeIn 0.3s ease;
 }
 
-@keyframes fadeIn {
+@keyframes modalFadeIn {
     from { opacity: 0; }
     to { opacity: 1; }
 }
 
 .modal-content {
-    max-width: 95%;
-    max-height: 95%;
-    border-radius: 10px;
-    box-shadow: 0 5px 25px rgba(0,0,0,0.5);
-    animation: zoomIn 0.3s ease;
+    max-width: 90%;
+    max-height: 85%;
+    border-radius: 20px;
+    box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.5);
+    animation: modalZoomIn 0.3s ease;
 }
 
-@keyframes zoomIn {
+@keyframes modalZoomIn {
     from { transform: scale(0.8); opacity: 0; }
     to { transform: scale(1); opacity: 1; }
 }
 
 .modal-close {
     position: absolute;
-    top: 20px;
+    top: 25px;
     right: 25px;
-    color: #fff;
-    font-size: 35px;
+    color: white;
+    font-size: 32px;
     font-weight: bold;
     cursor: pointer;
-    background: rgba(0,0,0,0.5);
-    width: 40px;
-    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    width: 50px;
+    height: 50px;
     border-radius: 50%;
     display: flex;
     justify-content: center;
     align-items: center;
-    z-index: 1001;
+    transition: all 0.3s ease;
+    backdrop-filter: blur(10px);
+    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .modal-close:hover {
-    background: rgba(255,255,255,0.2);
+    background: rgba(255, 255, 255, 0.2);
+    transform: rotate(90deg);
 }
 
-/* Responsive para tablets y desktop */
+/* Estados de la cámara */
+.camera-active .btn-primary {
+    background: linear-gradient(135deg, var(--success), #059669);
+}
+
+/* Responsive */
 @media (min-width: 768px) {
-    body {
-        padding: 2em;
-        max-width: 600px;
-        margin: 0 auto;
+    .app-container {
+        max-width: 500px;
+        padding: 24px;
     }
     
     .gallery-thumbnail {
-        width: 150px;
-        height: 150px;
+        width: 140px;
+        height: 140px;
     }
+    
+    .btn {
+        max-width: 350px;
+    }
+}
+
+/* Efectos de carga */
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.7; }
+}
+
+.loading {
+    animation: pulse 1.5s ease-in-out infinite;
+}
+
+/* Notificaciones */
+.notification {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    background: var(--success);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    box-shadow: var(--shadow);
+    transform: translateX(150%);
+    transition: transform 0.3s ease;
+    z-index: 1001;
+}
+
+.notification.show {
+    transform: translateX(0);
 }
