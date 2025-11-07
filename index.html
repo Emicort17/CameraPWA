@@ -6,9 +6,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>PhotoPWA</title>
     <meta name="theme-color" content="#6366f1">
-    <link rel="manifest" href="manifest.json">
     <link rel="stylesheet" href="/CameraPWA/style.css">
-
+    <link rel="manifest" href="/CameraPWA/manifest.json">
     
 </head>
 
@@ -20,16 +19,21 @@
         </header>
 
         <button id="openCamera" class="btn btn-primary">
-            📷 Abrir Cámara
+             Abrir Cámara
         </button>
 
         <div id="cameraContainer" class="camera-container" style="display: none;">
             <video id="video" autoplay muted playsinline>
                 Tu navegador no soporta el elemento video.
             </video>
-            <button id="takePhoto" class="btn btn-success">
-                ⚡ Tomar Foto
-            </button>
+             <div class="camera-controls">
+                <button id="switchCamera" class="btn btn-switch">
+                    Cambiar Cámara
+                </button>
+                <button id="takePhoto" class="btn btn-success">
+                     Tomar Foto
+                </button>
+            </div>
             <canvas id="canvas"></canvas>
         </div>
 
