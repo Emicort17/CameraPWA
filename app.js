@@ -20,13 +20,19 @@ const galleryScroll = document.getElementById('gallery-scroll');
 const modal = document.getElementById('modal');
 const modalImage = document.getElementById('modalImage');
 const modalClose = document.getElementById('modalClose');
+const switchCameraBtn = document.getElementById('switchCamera');
+let currentFacingMode = 'environment'; // 'environment' = trasera, 'user' = frontal
+let availableCameras = [];
 
 
 let stream = null; // Variable para almacenar el MediaStream de la cámara
 
 async function openCamera() {
     try {
-        // 1. Configuración mejorada para móvil
+        // 1. Primero enumerar las cámaras disponibles
+        await enumerateCameras();
+        
+        // 2. Configuración inicial (cámara trasera por defecto)
         const constraints = {
             video: {
                 facingMode: { ideal: 'environment' },
@@ -36,37 +42,120 @@ async function openCamera() {
             audio: false
         };
 
-        // 2. Obtener el Stream de Medios
+        // 3. Obtener el Stream de Medios
         stream = await navigator.mediaDevices.getUserMedia(constraints);
 
-        // 3. Asignar el Stream al Elemento <video>
+        // 4. Asignar el Stream al Elemento <video>
         video.srcObject = stream;
 
-        // 4. [CORRECIÓN] Esperar a que el video pueda reproducirse
+        // 5. Configurar el video
         video.onloadeddata = () => {
-            // Ajustar el canvas al tamaño real del video
             canvas.width = video.videoWidth;
             canvas.height = video.videoHeight;
-
-            // Ajustar también el contenedor para mantener proporciones
-            video.style.width = '100%';
-            video.style.height = 'auto';
-
-            console.log(`Video dimensiones: ${video.videoWidth}x${video.videoHeight}`);
-            console.log(`Canvas ajustado a: ${canvas.width}x${canvas.height}`);
+            
+            // Aplicar efecto espejo si es cámara frontal
+            updateCameraStyle();
+            
+            console.log(`Cámara ${currentFacingMode === 'environment' ? 'trasera' : 'frontal'} activa`);
+            console.log(`Dimensiones: ${video.videoWidth}x${video.videoHeight}`);
         };
 
-        // 5. Actualización de la UI
+        // 6. Actualización de la UI
         cameraContainer.style.display = 'block';
         openCameraBtn.textContent = 'Cámara Abierta';
         openCameraBtn.disabled = true;
-
-        console.log('Cámara abierta');
+        
+        // Mostrar indicador de cámara activa
+        showCameraIndicator();
 
     } catch (err) {
         console.error('Error al abrir la cámara: ', err);
         alert('No se pudo acceder a la cámara. Asegúrate de dar permisos.');
     }
+}
+
+// Función para enumerar cámaras disponibles
+async function enumerateCameras() {
+    try {
+        const devices = await navigator.mediaDevices.enumerateDevices();
+        availableCameras = devices.filter(device => device.kind === 'videoinput');
+        
+        console.log(`Cámaras disponibles: ${availableCameras.length}`);
+        
+        // Ocultar botón de cambiar cámara si solo hay una
+        if (availableCameras.length <= 1) {
+            switchCameraBtn.style.display = 'none';
+        } else {
+            switchCameraBtn.style.display = 'block';
+        }
+    } catch (err) {
+        console.error('Error al enumerar cámaras:', err);
+    }
+}
+
+// Función para cambiar entre cámaras
+async function switchCamera() {
+    if (!stream) {
+        return;
+    }
+
+    try {
+        // 1. Detener la cámara actual
+        stream.getTracks().forEach(track => track.stop());
+        
+        // 2. Cambiar el modo de cámara
+        currentFacingMode = currentFacingMode === 'environment' ? 'user' : 'environment';
+        
+        // 3. Nuevas constraints
+        const constraints = {
+            video: {
+                facingMode: { ideal: currentFacingMode },
+                width: { ideal: 1920 },
+                height: { ideal: 1080 }
+            },
+            audio: false
+        };
+
+        // 4. Obtener nuevo stream
+        stream = await navigator.mediaDevices.getUserMedia(constraints);
+        video.srcObject = stream;
+        
+        // 5. Actualizar estilo (efecto espejo para frontal)
+        updateCameraStyle();
+        
+        // 6. Actualizar indicador
+        showCameraIndicator();
+        
+        console.log(`Cambiado a cámara ${currentFacingMode === 'environment' ? 'trasera' : 'frontal'}`);
+        
+    } catch (err) {
+        console.error('Error al cambiar cámara:', err);
+        alert('No se pudo cambiar la cámara. Intenta de nuevo.');
+    }
+}
+
+// Función para aplicar efecto espejo en cámara frontal
+function updateCameraStyle() {
+    if (currentFacingMode === 'user') {
+        video.classList.add('mirror-mode');
+    } else {
+        video.classList.remove('mirror-mode');
+    }
+}
+
+// Función para mostrar indicador de cámara activa
+function showCameraIndicator() {
+    // Remover indicador anterior si existe
+    const existingIndicator = document.querySelector('.camera-indicator');
+    if (existingIndicator) {
+        existingIndicator.remove();
+    }
+    
+    const indicator = document.createElement('div');
+    indicator.classList.add('camera-indicator');
+    indicator.textContent = currentFacingMode === 'environment' ? ' Trasera' : ' Frontal';
+    
+    cameraContainer.appendChild(indicator);
 }
 
 function takePhoto() {
@@ -75,37 +164,30 @@ function takePhoto() {
         return;
     }
 
-    // 1. Obtener las dimensiones REALES del video en pantalla
-    const videoDisplayWidth = video.videoWidth;
-    const videoDisplayHeight = video.videoHeight;
+    // Usar un tamaño fijo balanceado
+    const targetWidth = 800;
+    const targetHeight = 600;
     
-    // 2. Obtener las dimensiones del CONTENEDOR del video
-    const containerWidth = video.offsetWidth;
-    const containerHeight = video.offsetHeight;
+    canvas.width = targetWidth;
+    canvas.height = targetHeight;
     
-    console.log(`Video real: ${videoDisplayWidth}x${videoDisplayHeight}`);
-    console.log(`Contenedor: ${containerWidth}x${containerHeight}`);
+    // Si es cámara frontal, necesitamos corregir el efecto espejo
+    if (currentFacingMode === 'user') {
+        ctx.save();
+        ctx.scale(-1, 1); // Aplicar espejo horizontal
+        ctx.drawImage(video, -targetWidth, 0, targetWidth, targetHeight);
+        ctx.restore();
+    } else {
+        ctx.drawImage(video, 0, 0, targetWidth, targetHeight);
+    }
 
-    // 3. Calcular la relación de aspecto y escalar apropiadamente
-    const scaleX = videoDisplayWidth / containerWidth;
-    const scaleY = videoDisplayHeight / containerHeight;
-    const scale = Math.min(scaleX, scaleY);
-    
-    // 4. Ajustar el canvas al tamaño de DISPLAY (no al nativo)
-    canvas.width = containerWidth;
-    canvas.height = containerHeight;
-    
-    // 5. Dibujar el video escalado al tamaño del contenedor
-    ctx.drawImage(video, 0, 0, containerWidth, containerHeight);
+    const imageDataURL = canvas.toDataURL('image/jpeg', 0.8);
 
-    // 6. Conversión a Data URL
-    const imageDataURL = canvas.toDataURL('image/jpeg', 0.8); // Usar JPEG para menor tamaño
-
-    console.log('Foto capturada con dimensiones:', canvas.width, 'x', canvas.height);
-
-    // 7. Añadir la foto a la galería
+    console.log(`Foto capturada con cámara ${currentFacingMode === 'environment' ? 'trasera' : 'frontal'}`);
     addPhotoToGallery(imageDataURL);
 }
+
+switchCameraBtn.addEventListener('click', switchCamera);
 
 function addPhotoToGallery(imageDataURL) {
     // Mostrar el contenedor de la galería si es la primera foto
